@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شكرًا يا أبي</title>
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            direction: rtl;
+            text-align: center;
+        }
+
+        /* Page 1 - Heart and Poem */
+        .page1 {
+            width: 80%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .title {
+            font-size: 28px;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+
+        .poem-text {
+            font-size: 18px;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .name {
+            font-size: 24px;
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+
+        .heart {
+            width: 100px;
+            height: 100px;
+            background-color: #e74c3c;
+            transform: rotate(-45deg);
+            margin: 0 auto 20px;
+        }
+
+        .heart:before,
+        .heart:after {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: #e74c3c;
+            border-radius: 50%;
+        }
+
+        .heart:before {
+            top: -50px;
+            left: 0;
+        }
+
+        .heart:after {
+            left: 50px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .button#exit {
+            background-color: #e74c3c;
+        }
+
+        .button#continue {
+            background-color: #3498db;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        /* Page 2 - 3D Heart */
+        .page2 {
+            width: 80%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            display: none;
+        }
+
+        .heart-3d {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+
+        .heart-3d .front,
+        .heart-3d .back {
+            width: 100%;
+            height: 100%;
+            background-color: #e74c3c;
+            position: absolute;
+            transform-style: preserve-3d;
+            transform: rotateY(0deg);
+            transition: transform 0.5s;
+        }
+
+        .heart-3d .front {
+            z-index: 1;
+        }
+
+        .heart-3d .back {
+            transform: rotateY(180deg);
+        }
+
+        .heart-3d:hover .front {
+            transform: rotateY(-180deg);
+        }
+
+        .heart-3d:hover .back {
+            transform: rotateY(0deg);
+        }
+
+        .message {
+            font-size: 24px;
+            color: #e74c3c;
+            margin-top: 20px;
+        }
+
+        /* Error Page */
+        .error-page {
+            width: 80%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            display: none;
+        }
+
+        .final-message {
+            display: none;
+            font-size: 24px;
+            color: #3498db;
+            margin-top: 20px;
+        }
+
+        /* Audio Player */
+        .audio-player {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Page 1 -->
+    <div class="page1" id="page1">
+        <div class="heart"></div>
+        <div class="title">شكرًا يا أبي</div>
+        <div class="name">عثمان المديوني</div>
+        <div class="poem-text">
+            يا أبا الحب في كل لحظة،<br>
+            كم كنت السند والعز والمأوى.<br>
+            بجهدك وصبرك عشنا الحياة,<br>
+            فلك منا الشكر طوال الدهر.
+        </div>
+        <div class="buttons">
+            <button id="exit">خروج</button>
+            <button id="continue">إكمال</button>
+        </div>
+    </div>
+
+    <!-- Page 2 -->
+    <div class="page2" id="page2">
+        <div class="heart-3d">
+            <div class="front heart"></div>
+            <div class="back heart"></div>
+        </div>
+        <div class="message">أحبك يا أبي</div>
+        <div class="buttons">
+            <button id="exit-error">خروج</button>
+            <button id="finish">إنهاء</button>
+        </div>
+    </div>
+
+    <!-- Error Page -->
+    <div class="error-page" id="errorPage">
+        <div class="title">خطأ!</div>
+        <div class="message">لا يمكنك الخروج الآن!</div>
+        <button id="close-error">إنهاء</button>
+    </div>
+
+    <!-- Final Message -->
+    <div class="final-message" id="finalMessage">أحبك كثيرًا يا أبي</div>
+
+    <!-- Audio Player -->
+    <div class="audio-player" id="audioPlayer">
+        <audio id="song" controls autoplay loop>
+            <source src="https://s3.dlld.link/youtube-377340ae/HYTg_roxlts/320.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=HlHlYQpM03dUtLYlWDxmFLTm%2F20250214%2Fnl-east-host02%2Fs3%2Faws4_request&X-Amz-Date=20250214T203313Z&X-Amz-Expires=600&X-Amz-Signature=38092acade6bbb39aa9505bfc114f983a7a813291105eba8d1c226a66b88475f&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22%D8%A7%D9%8F%D8%AD%D9%90%D8%A8%D9%91%D9%8F%D9%83%D9%8E%20%D9%8A%D9%8E%D8%A7%20%D8%A7%D9%8E%D8%A8%D9%90%D9%89%D9%92%20%D8%AC%D8%AF%D9%8B%D8%A7.mp3%22&x-amz-checksum-mode=ENABLED&x-id=GetObject" type="audio/mpeg"> <!-- استبدل الرابط هنا -->
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <script>
+        const page1 = document.getElementById('page1');
+        const page2 = document.getElementById('page2');
+        const errorPage = document.getElementById('errorPage');
+        const finalMessage = document.getElementById('finalMessage');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const song = document.getElementById('song');
+
+        // Show Page 2 on Continue
+        document.getElementById('continue').addEventListener('click', () => {
+            page1.style.display = 'none';
+            page2.style.display = 'block';
+        });
+
+        // Show Error Page on Exit from Page 2
+        document.getElementById('exit-error').addEventListener('click', () => {
+            page2.style.display = 'none';
+            errorPage.style.display = 'block';
+        });
+
+        // Show Final Message and Play Song on Finish
+        document.getElementById('finish').addEventListener('click', () => {
+            page2.style.display = 'none';
+            finalMessage.style.display = 'block';
+            audioPlayer.style.display = 'block'; // Show the audio player
+            song.play(); // Start playing the song
+        });
+
+        // Close Error Page
+        document.getElementById('close-error').addEventListener('click', () => {
+            errorPage.style.display = 'none';
+            page2.style.display = 'block';
+        });
+
+        // Confirm Exit from Page 1
+        document.getElementById('exit').addEventListener('click', () => {
+            if (confirm("هل تود الخروج؟")) {
+                alert("شكراً لك!");
+                window.location.href = "#";
+            }
+        });
+
+        // Prevent pausing the song
+        song.addEventListener('pause', function () {
+            alert("لا يمكنك إيقاف الأغنية!");
+            song.play(); // Restart the song
+        });
+    </script>
+</body>
+</html>
